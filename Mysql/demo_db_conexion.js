@@ -79,10 +79,10 @@ resolve(result);
    return new Promise((resolve, reject) =>{
       connection.query(
     //    "SELECT p.descripcion, s.estado FROM `productos` p join `estados` s on s.id_estado= p.id_estado WHERE p.codigo = ?",
-    " select productos.descripcion,  clientes.nombre from control join productos on productos.id = control.id_producto join estados on estados.id_estado = productos.id_estado join clientes on clientes.id = control.id_cliente where clientes.documento = ?",
+    " select productos.descripcion, productos.codigo,  clientes.nombre from control join productos on productos.id = control.id_producto join estados on estados.id_estado = productos.id_estado join clientes on clientes.id = control.id_cliente where clientes.documento = ?",
          //  "select nombre, email, direccion, puesto from `clientes` WHERE `clientes`.`documento` = ?",
       [documento], (err, result) => {
-         return err ? reject(err) : resolve(result[0])
+         return err ? reject(err) : resolve(result)
          
        }
  

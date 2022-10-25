@@ -79,31 +79,40 @@ res.send({text: "No se encontro equipo"})
             break;
 
             
-             case "usuario":
-  var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
-          var respuesta = await  db.cbusuario(documento)
-          if (respuesta != undefined){
-           res.send({text: "El nombre del usuario es " + respuesta.nombre + " Correo   " + respuesta.email + "Pertenece a la Direccion " + respuesta.direccion + " Puesto: " + respuesta.puesto}) 
-          } else {
- res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
+//              case "usuario":
+//   var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
+//           var respuesta = await  db.cbusuario(documento)
+//           if (respuesta != undefined){
+//            res.send({text: "El nombre del usuario es " + respuesta.nombre + " Correo   " + respuesta.email + "Pertenece a la Direccion " + respuesta.direccion + " Puesto: " + respuesta.puesto}) 
+//           } else {
+//  res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
 
-          }
-             break;
+//           }
+//              break;
 
 
 
-            // case "usuario":
-            //   var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
-            //           var respuesta = await  db.equiposusuario(documento)
-            //           if (respuesta != undefined){
-            //            res.send({text: "Actualmente  " + respuesta.nombre + "tiene asignado los siguientes equipos   "
-            //            + "\n "  
-            //             + respuesta.descripcion}) 
-            //           } else {
-            //  res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
+            case "usuario":
+              var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
+                      var respuesta = await  db.equiposusuario(documento)
+                      console.log("esto es un identificador")
+                      console.log(respuesta)
+                      if (respuesta != undefined){
+                        const listDes = []
+                        let index = 0
+                        respuesta.forEach(element => {
+                          index += 1
+                          listDes.push(index +  ". " + element.descripcion + " Serie: "  + element.codigo +  " \n")
+                        });   
+                        res.send({text: "Actualmente  " + respuesta[0].nombre + " tiene asignado los siguientes equipos   "
+                          + "\n "  
+                           + listDes.toString().replaceAll(',' , '')}) 
+
+                      } else {
+             res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
              
-            //           }
-            //              break;
+                      }
+                         break;
 
 
             case "recuperar":
