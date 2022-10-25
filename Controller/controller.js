@@ -68,9 +68,16 @@ async function sendToIA(req, res){
          var serie = responses[0].queryResult.parameters.fields.NumeroSerie.stringValue
          var respuesta = await  db.descriptionDesktop(serie)
          if (respuesta != undefined){
+          if (respuesta.estado === 'Disponible') {
           res.send({text: "Se ha encontrado un equipo  " + respuesta.descripcion + " actualmente esta  " + respuesta.estado 
         + "\n "  
         + "\nIngrese codigo de empleado del usuario asignar equipo"}) 
+         }
+         else {
+                    
+          res.send({text: "Si deseas asignar un equipo revisa que no este asignado"})
+         }
+          
          } else {
 res.send({text: "No se encontro equipo"})
 
