@@ -56,10 +56,11 @@ async function sendToIA(req, res){
  
   console.log(result.fulfillmentText)
   console.log('----inicio---')
-  //console.log(req.body.queryResult.outputContexts[0].parameters['paramname.original']);
+ // console.log(req.body.queryResult.outputContexts[0].parameters['paramname.original']);
   // console.log(responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue)
   // console.log(responses[0].queryResult.parameters.fields.NumeroSerie.stringValue)
   console.log(responses[0].queryResult.action)
+  console.log(responses[0].queryResult.fulfillmentText)
     console.log('----fin---')
     switch   (responses[0].queryResult.action)
     {
@@ -67,7 +68,7 @@ async function sendToIA(req, res){
          var serie = responses[0].queryResult.parameters.fields.NumeroSerie.stringValue
          var respuesta = await  db.descriptionDesktop(serie)
          if (respuesta != undefined){
-          res.send({text: "Se ha encontrado un equipo asignado " + respuesta.descripcion + " actualmente esta  " + respuesta.estado 
+          res.send({text: "Se ha encontrado un equipo  " + respuesta.descripcion + " actualmente esta  " + respuesta.estado 
         + "\n "  
         + "\nIngrese codigo de empleado del usuario asignar equipo"}) 
          } else {
@@ -78,16 +79,46 @@ res.send({text: "No se encontro equipo"})
             break;
 
             
-            case "usuario":
- var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
-         var respuesta = await  db.cbusuario(documento)
-         if (respuesta != undefined){
-          res.send({text: "El nombre del usuario es " + respuesta.nombre + " Correo   " + respuesta.email + "Pertenece a la Direccion " + respuesta.direccion + " Puesto: " + respuesta.puesto}) 
-         } else {
-res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
+             case "usuario":
+  var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
+          var respuesta = await  db.cbusuario(documento)
+          if (respuesta != undefined){
+           res.send({text: "El nombre del usuario es " + respuesta.nombre + " Correo   " + respuesta.email + "Pertenece a la Direccion " + respuesta.direccion + " Puesto: " + respuesta.puesto}) 
+          } else {
+ res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
 
-         }
-            break;
+          }
+             break;
+
+
+
+            // case "usuario":
+            //   var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
+            //           var respuesta = await  db.equiposusuario(documento)
+            //           if (respuesta != undefined){
+            //            res.send({text: "Actualmente  " + respuesta.nombre + "tiene asignado los siguientes equipos   "
+            //            + "\n "  
+            //             + respuesta.descripcion}) 
+            //           } else {
+            //  res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
+             
+            //           }
+            //              break;
+
+
+            case "recuperar":
+              var serie = responses[0].queryResult.parameters.fields.NumeroSerie2.stringValue
+                      var respuesta = await  db.recuperar(serie)
+                      console.log("esto es consolo")
+                      console.log(respuesta.affectedRows)
+                      if (respuesta.affectedRows !== 0){
+                       res.send({text: "Se recupero el equipo"}) 
+                      } else {
+             res.send({text: "No se encontro equipo asignado para recuperar"})
+            
+                      }
+                         break;
+     
 
             default: 
             res.send({text: result.fulfillmentText})
