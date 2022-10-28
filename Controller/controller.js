@@ -69,13 +69,12 @@ async function sendToIA(req, res){
          var respuesta = await  db.descriptionDesktop(serie)
          if (respuesta != undefined){
           if (respuesta.estado === 'Disponible') {
-          res.send({text: "Se ha encontrado un equipo  " + respuesta.descripcion + " actualmente esta  " + respuesta.estado 
-        + "\n "  
-        + "\nIngrese codigo de empleado del usuario asignar equipo"}) 
+          res.send({text: "Se ha encontrado un equipo  " + respuesta.descripcion + " actualmente esta  " + respuesta.estado + " id " + respuesta.id
+        }) 
          }
          else {
                     
-          res.send({text: "Si deseas asignar un equipo revisa que no este asignado"})
+          res.send({text: "La serie ingresada corresponde a:  " + respuesta.descripcion +  " estado " + respuesta.estado + "\n" +  " Si deseas asignar un equipo revisa que este disponible"})
          }
           
          } else {
@@ -86,16 +85,18 @@ res.send({text: "No se encontro equipo"})
             break;
 
             
-//              case "usuario":
-//   var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
-//           var respuesta = await  db.cbusuario(documento)
-//           if (respuesta != undefined){
-//            res.send({text: "El nombre del usuario es " + respuesta.nombre + " Correo   " + respuesta.email + "Pertenece a la Direccion " + respuesta.direccion + " Puesto: " + respuesta.puesto}) 
-//           } else {
-//  res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
+             case "datos":
+  var documento = responses[0].queryResult.parameters.fields.CodigoEmpleado.numberValue
+          var respuesta = await  db.cbusuario(documento)
+          if (respuesta != undefined){
+           res.send({text: "El nombre del usuario es " + respuesta.nombre + " id " + respuesta.id + "\n " 
+           + "Correo   " + respuesta.email +  "\n"
+           + "Pertenece a la Direccion " + respuesta.direccion + " Puesto: " + respuesta.puesto}) 
+          } else {
+ res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
 
-//           }
-//              break;
+          }
+             break;
 
 
 
@@ -110,10 +111,11 @@ res.send({text: "No se encontro equipo"})
                         respuesta.forEach(element => {
                           index += 1
                           listDes.push(index +  ". " + element.descripcion + " Serie: "  + element.codigo +  " \n")
-                        });   
-                        res.send({text: "Actualmente  " + respuesta[0].nombre + " tiene asignado los siguientes equipos   "
-                          + "\n "  
-                           + listDes.toString().replaceAll(',' , '')}) 
+                         });   
+                     //   res.send({text: "Actualmente  " + respuesta[0].nombre + " con puesto: " + respuesta[1].puesto + " de la direccion  " + respuesta[2].direccion +  "\n"  + "\n" + " Tiene asignado los siguientes equipos   "
+                     res.send({text: "Actualmente  " + respuesta[0].nombre +  "\n"  + "\n" + " Tiene asignado los siguientes equipos   " 
+                     + "\n "  
+                           + listDes.toString().replaceAll(',' , '') }) 
 
                       } else {
              res.send({text: "No se encontro usuario, valida bien por favor el codigo"})
@@ -134,12 +136,68 @@ res.send({text: "No se encontro equipo"})
             
                       }
                          break;
+
+
+
+                         case "insertar":
+                          var serie = responses[0].queryResult.parameters.fields.CodSerie.numberValue
+                          var codigos = responses[0].queryResult.parameters.fields.IdCod.numberValue
+                                  var respuesta = await  db.insertar(codigos,serie)
+                                  if (respuesta != undefined){
+                                   res.send({text: "Se recupero el equipo"}) 
+                                  } else {
+                         res.send({text: "No se encontro equipo asignado para recuperar"})
+                        
+                                  }
+                                     break;
+
+
+
+
+                                     case "problema":
+                                      var problemas = responses[0].queryResult.parameters.fields.Proble.stringValue
+                                              var respuesta = await  db.soporteit(problemas)
+                                              if (respuesta != undefined){
+                                               res.send({text: respuesta.solucion}) 
+                                              } else {
+                                     res.send({text: "No se encontro problema"})
+                                    
+                                              }
+                                                 break;
+                                    
+
+                                                 case "solucion":
+                                                  var solucion = responses[0].queryResult.parameters.fields.Solucion.stringValue
+                                                          var respuesta = await  db.solucionbd(solucion)
+                                                          if (respuesta != undefined){
+                                                           res.send({text: respuesta.positivo}) 
+                                                          } else {
+                                                 res.send({text: "Fue un placer servirte"})
+                                                
+                                                          }
+                                                             break;
+
+
+                                                             case "NoFunciono":
+                                                              var nosolucion = responses[0].queryResult.parameters.fields.Negativo.stringValue
+                                                                      var respuesta = await  db.nosolucionbd(nosolucion)
+                                                                      if (respuesta != undefined){
+                                                                       res.send({text: respuesta.negativo}) 
+                                                                      } else {
+                                                             res.send({text: "Mejorare para poder ayudarte una proxima vez"})
+                                                            
+                                                                      }
+                                                                         break;
      
 
             default: 
             res.send({text: result.fulfillmentText})
                     break;     
     }
+    
+
+
+
     
 // res.send({text: respuesta})
  
