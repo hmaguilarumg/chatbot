@@ -158,11 +158,11 @@ function nosolucionbd(nosolucion){
 
 
     function insertar(codigos,serie){
-    console.log("si   " + codigos)
-    console.log("si   " + serie)
+    console.log("codigo"  + codigos)
+    console.log("serie" + serie)
   return new Promise((resolve, reject) =>{
       connection.query(
-      "INSERT INTO `control` (`id`, `codigo`, `id_cliente`, `id_vendedor`, `id_producto`, `impuesto`, `neto`, `total`, `metodo_pago`, `fecha`, `productos`)   VALUES (NULL, '123', ?, '72', '162', '123', '123', '123', 'CambioFijo-si', current_timestamp(), '123');",
+      "INSERT INTO `control` (`id`, `codigo`, `id_cliente`, `id_vendedor`, `id_producto`, `impuesto`, `neto`, `total`, `metodo_pago`, `fecha`, `productos`)   VALUES (NULL, '123', ?, '72', ?, '123', '123', '123', 'CambioFijo-si', current_timestamp(), '123');",
        [codigos,serie], (err, result) => {
          return err ? reject(err) : resolve(result[0])
          

@@ -142,11 +142,13 @@ res.send({text: "No se encontro equipo"})
                          case "insertar":
                           var serie = responses[0].queryResult.parameters.fields.CodSerie.numberValue
                           var codigos = responses[0].queryResult.parameters.fields.IdCod.numberValue
+                          console.log("response: ", responses[0].queryResult.parameters.fields)
+                          console.log("response: ", responses[0].queryResult.parameters.fields)
                                   var respuesta = await  db.insertar(codigos,serie)
                                   if (respuesta != undefined){
-                                   res.send({text: "Se recupero el equipo"}) 
+                                   res.send({text: "Se inserto el equipo"}) 
                                   } else {
-                         res.send({text: "No se encontro equipo asignado para recuperar"})
+                         res.send({text: "No se encontro serie"})
                         
                                   }
                                      break;
@@ -158,9 +160,10 @@ res.send({text: "No se encontro equipo"})
                                       var problemas = responses[0].queryResult.parameters.fields.Proble.stringValue
                                               var respuesta = await  db.soporteit(problemas)
                                               if (respuesta != undefined){
-                                               res.send({text: respuesta.solucion}) 
+                                               res.send({text: "Por favor sigue los pasos que te detallo a continuación " + "\n" 
+                                               + "\n" +   respuesta.solucion + "\n" + "\n" + "Responde si lograste resolver tu inquietud"}) 
                                               } else {
-                                     res.send({text: "No se encontro problema"})
+                                     res.send({text: "Se asigno equipo,se envio por correo hoja asigncion"})
                                     
                                               }
                                                  break;
