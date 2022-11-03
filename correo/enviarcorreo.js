@@ -12,7 +12,7 @@ const msg = {
 sgMail
   .send(msg)
   .then(() => {
-    console.log('asdadsadsad sent')
+    console.log('123123213d sent')
   })
   .catch((error) => {
     console.error(error)
